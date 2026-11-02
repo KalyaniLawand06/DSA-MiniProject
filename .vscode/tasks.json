@@ -1,0 +1,4 @@
+{ "version": "2.0.0", "tasks": [
+  { "label": "Run application", "type": "shell", "command": "${workspaceFolder}\\RUN.bat", "problemMatcher": [] },
+  { "label": "Stop application", "type": "shell", "command": "${workspaceFolder}\\STOP.bat", "problemMatcher": [] },
+  { "label": "Build backend (needs a compiler)", "type": "shell", "command": "${workspaceFolder}\\BUILD.bat", "problemMatcher": [] } ] }

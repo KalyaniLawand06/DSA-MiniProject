@@ -1,0 +1,26 @@
+TEST REPORT  (what was actually tested, and where)
+===================================================
+Environment: Linux (Ubuntu 24.04), g++ 13, C++17, -Wall -Wextra: no warnings.
+Windows: NOT tested - no Windows compiler/runtime was available.
+
+TESTED (Linux, real HTTP requests against the compiled C++ server):
+ [x] Backend compiles cleanly
+ [x] Static files served (index.html, app.js); path traversal blocked (403/404)
+ [x] Register student (POST) incl. validation: duplicate ID and bad time rejected
+ [x] Edit (PUT) and delete (DELETE) student
+ [x] Persistence: data survives a server restart (students and groups)
+ [x] Compatibility scores + breakdown (e.g. Aarav vs Diya = 100, vs Ananya = 96.5)
+ [x] Graph construction: adjacency list, 14 edges at threshold 50
+ [x] DSU component count equals BFS component count (2 = 2)
+ [x] Greedy grouping: 3 groups, 8/8 students, avg 78.9
+ [x] BFS grouping: 3 groups, 8/8 students, avg 66.3 (different groups from greedy)
+ [x] No student appears in two groups (8 members, 8 unique ids)
+ [x] Remove student from group; groups with <2 members dissolve
+ [x] Deleting a student also removes them from groups
+ [x] Compare endpoint, dynamic explanation text for every group
+ [x] Clean shutdown via /api/shutdown; "port in use" gives error and exit code 2
+ [x] Frontend loaded in headless Chromium: all 7 pages render, 0 JavaScript errors
+
+NOT TESTED:
+ [ ] Windows build (Winsock code path), RUN.bat / STOP.bat / BUILD.bat execution
+ [ ] Opening in VS Code, other browsers, touch devices

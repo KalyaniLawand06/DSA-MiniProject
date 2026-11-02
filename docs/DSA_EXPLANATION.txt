@@ -1,0 +1,51 @@
+VIVA NOTES - Smart Study Group Formation System
+================================================
+1. WHAT PROBLEM DOES IT SOLVE?
+   Students register subjects, days/time, goals, skills and level. The system
+   scores every pair of students and then forms study groups.
+
+2. COMPATIBILITY SCORE (Compatibility.cpp, computeCompat)
+   subjects : 40 * commonSubjects / min(#subjectsA, #subjectsB)
+   timings  : 30 * (commonDays/min days) * (overlapping hours/min duration)
+   goals    : 20 * commonGoals / min(#goalsA, #goalsB)
+   skills   : 7 * (skills only one has / all skills) + 3 if levels differ
+   A pair is "meaningful" only if it has a common subject AND overlapping time.
+
+3. GRAPH (Graph.cpp)  vector<vector<Edge>> adj;  Edge = {to, weight}
+   Vertex = student. Undirected edge stored in both lists.
+   Space O(V+E). Building: O(V^2) pair comparisons.
+   Why list not matrix? Graph is sparse; BFS only walks real neighbours.
+
+4. GREEDY (GreedyGrouping.cpp)
+   edges sorted by weight (descending) -> for each edge: if the two students
+   are in different DSU sets, merge them when (a) size <= min(maxSize,
+   members' preferred sizes) and (b) all members share a subject.
+   "Greedy" = always take the best remaining pair, never undo it.
+   Time: O(E log E) sort + O(E*V) merging checks.
+
+5. DSU (DSU.cpp)
+   parent[] and size[]. find(x) climbs to the root and compresses the path.
+   unite(a,b) attaches the smaller tree to the larger. A student is in exactly
+   one set, so nobody can be in two groups. Used in greedy grouping and to count
+   components in /api/graph (cross-check with BFS).
+
+6. BFS (BFSGrouping.cpp)
+   Queue-based traversal finds each connected component (O(V+E)). A component
+   bigger than the group size is cut into pieces in BFS order; inside a piece
+   only members who study the piece's main subject are kept.
+
+7. GREEDY vs BFS - why different results
+   Greedy builds groups bottom-up from the strongest pairs and demands ONE
+   subject common to ALL members. BFS works top-down from clusters and needs
+   only a MAJORITY subject, so it groups more loosely (lower average score).
+
+8. GROUP EXPLANATIONS (describeGroup)
+   Common subjects, members per day, best overlapping time window, level mix,
+   skills, shared goals and strongest pair are all computed from the data.
+
+9. LIKELY VIVA QUESTIONS
+   - Why path compression?  Keeps trees flat, find is almost O(1).
+   - Why sort descending?   Greedy choice = highest compatibility first.
+   - Complexity of whole pipeline? O(V^2) scoring + O(E log E) sort.
+   - Limitation of greedy?  A choice made early is never revisited.
+   - Why threshold?         Removes weak edges so groups stay meaningful.
